@@ -37,8 +37,9 @@ public final class ViewModel: ViewModelType {
 extension ViewModel: ViewModelInputs {
   public func requestData() {
     dataModel.requestData { [weak self] info in
-      guard let self = self else { return }
-      let paramString: String = String.init(format: "현재 유저의 URL은 %@입니다.", info.current_user_url!)
+      // ViewModel은 Model로부터 전달받은 info를 View에서 사용할수있도록 적절히 가공.
+      guard let self = self, let clientIP = info.client_ip else { return }
+      let paramString: String = String.init(format: "현재 유저의 IP는\n %@입니다.", clientIP)
       self.outputs.onReceiveData.accept(paramString)
     }
   }
@@ -50,7 +51,9 @@ extension ViewModel: ViewModelOutputs {
 
 extension ViewModel: ModelListenerProtocol {
   func onRecevieData(receiveData: ReceiveData) {
-    let paramString: String = String.init(format: "현재 유저의 URL은 %@입니다.", receiveData.current_user_url!)
+    // ViewModel은 Model로부터 전달받은 info를 View에서 사용할수있도록 적절히 가공.
+    guard let clientIP = receiveData.client_ip else { return }
+    let paramString: String = String.init(format: "현재 유저의 IP는\n %@입니다.", clientIP)
     self.outputs.onReceiveData.accept(paramString)
   }
 }

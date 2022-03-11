@@ -9,10 +9,8 @@ import Foundation
 import Alamofire
 
 public class ReceiveData: Codable {
-  var current_user_url: String?
-  var current_user_authorizations_html_url: String?
-  var authorizations_url: String?
-  var code_search_url: String?
+  var client_ip: String?
+  var datetime: String?
 }
 
 protocol ModelListenerProtocol: AnyObject {
@@ -35,11 +33,11 @@ class Model: NSObject {
 
 extension Model: ModelMethodProtocol {
   func requestData(completion: @escaping ((ReceiveData) -> Void)) {
-    // 클라이언트의 요청 및 서버의 응답이 오는 경우
+    // 클라이언트의 요청 및 서버의 응답이 오는 경우.
     // ex.
     // [1] Client -> Server (Request to Server)
     // [2] Client <- Server (Response from Server)
-    let requestPath: String = "https://api.github.com"
+    let requestPath: String = "https://worldtimeapi.org/api/timezone/Asia/Seoul"
     AF.request(requestPath, method: .get).responseDecodable(of: ReceiveData.self) { (response) in
       switch response.result {
       case .success:
@@ -53,7 +51,7 @@ extension Model: ModelMethodProtocol {
   
   func onReceiveRequestData(data: ReceiveData) {
     // 서버에서 클라이언트로 일방적 응답이 오는 경우.
-    // 클라이언트와 서버가 Connect 상태이고, 서버의 사정으로 인해 끊어졌거나 등의 알림을 클라이언트로 알려주는 경우 등이 있음.
+    // 클라이언트와 서버가 상시 연결중인 상태에서 서버의 사정으로 인해 끊어졌거나 서버의 상태가 변경되는 등의 상태 변화를 클라이언트로 알려주는 경우가 여기 동작에 해당.
     // ex.
     // [1] Client <- Server (Response from Server)
     self.listener?.onRecevieData(receiveData: data)

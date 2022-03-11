@@ -12,4 +12,6 @@ target 'MVVM_Example' do
 
   pod 'Alamofire'
   
+  pod 'Then'
+  
 end
