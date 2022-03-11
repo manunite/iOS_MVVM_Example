@@ -25,7 +25,7 @@ class ViewController: UIViewController {
     $0.numberOfLines = 2
   }
   let requestButton = UIButton().then {
-    $0.setTitle("업데이트", for: .normal)
+    $0.setTitle("업데이트 Button", for: .normal)
     $0.setTitleColor(.brown, for: .normal)
     $0.layer.borderColor = UIColor.brown.cgColor
     $0.layer.borderWidth = 1.0
@@ -43,7 +43,7 @@ class ViewController: UIViewController {
     // 버튼클릭을 통한 ViewModel에 값 업데이트 요청 동작
     self.requestButton.rx.tap.subscribe(onNext: {[weak self] in
       guard let self = self else { return }
-      self.viewModel.requestData()
+      self.viewModel.inputs.requestData()
     }).disposed(by: disposeBag)
   }
   
@@ -57,7 +57,7 @@ class ViewController: UIViewController {
       make.centerY.equalTo(self.view.safeAreaLayoutGuide).offset(-25)
     }
     self.requestButton.snp.makeConstraints { make in
-      make.width.equalTo(100)
+      make.width.equalTo(150)
       make.centerX.equalTo(self.view.safeAreaLayoutGuide)
       make.top.equalTo(self.resultLabel.snp.bottom).offset(20)
     }
